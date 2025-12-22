@@ -251,31 +251,58 @@ export const mockDecisions = [
       }
     },
   
-    // 12. Review (Rejected)
-    {
-      id: 'd_review2',
-      decisionType: 'review',
-      status: 'pending',
-      subject: { type: 'task', id: 't_review2', title: 'New Logo Design', source: 'manual' },
-      project: 'Marketing',
-      priority: 'normal',
-      question: 'Review work',
-      created: '2h ago',
-      data: {
-        completedBy: 'Claude (1 attempt)',
-        verified: true,
-        specSummary: {
-          objective: 'Create a modern, minimalist logo.',
-          format: 'SVG'
+      // 12. Review (Rejected)
+      {
+        id: 'd_review2',
+        decisionType: 'review',
+        status: 'pending',
+        subject: { type: 'task', id: 't_review2', title: 'New Logo Design', source: 'manual' },
+        project: 'Marketing',
+        priority: 'normal',
+        question: 'Review work',
+        created: '2h ago',
+        data: {
+          completedBy: 'Claude (1 attempt)',
+          verified: true,
+          specSummary: {
+            objective: 'Create a modern, minimalist logo.',
+            format: 'SVG'
+          },
+          resultSummary: {
+            preview: '[SVG Image Placeholder]',
+            fullDocLink: '#'
+          }
+        }
+      },
+    
+      // 13. Meeting Triage (Restored)
+      {
+        id: 'd_mt1',
+        decisionType: 'meeting_triage',
+        status: 'pending',
+        subject: {
+          type: 'transcript',
+          id: 'mt1',
+          title: 'Q1 Planning Kickoff',
+          source: 'zoom',
+          date: 'Dec 10, 2024',
+          duration: '52 min'
         },
-        resultSummary: {
-          preview: '[SVG Image Placeholder]',
-          fullDocLink: '#'
+        project: 'Q1 Planning',
+        priority: 'normal',
+        question: 'Which tasks from this meeting should be added to your queue?',
+        created: '2h ago',
+        data: {
+          extractedTasks: [
+            { id: 'mt1_t1', title: 'Draft Q1 OKRs document', assignee: 'You', priority: 'high', checked: true },
+            { id: 'mt1_t2', title: 'Schedule 1:1s with team leads', assignee: 'You', priority: 'normal', checked: false },
+            { id: 'mt1_t3', title: 'Review budget allocation spreadsheet', assignee: 'Team', priority: 'normal', checked: false },
+            { id: 'mt1_t4', title: 'Set up Q1 project tracking board', assignee: 'You', priority: 'normal', checked: true },
+            { id: 'mt1_t5', title: 'Send recap email to stakeholders', assignee: 'You', priority: 'high', checked: false }
+          ]
         }
       }
-    }
-  ];
-// Decision type configuration with colors and styling
+    ];// Decision type configuration with colors and styling
 export const decisionTypeConfig = {
   enrich: {
     icon: '🎙️',
@@ -364,6 +391,14 @@ export const decisionTypeConfig = {
     bgClass: 'bg-green-900/20',
     borderClass: 'border-l-green-500',
     hoverBgClass: 'hover:bg-green-900/30'
+  },
+  meeting_triage: {
+    icon: '🎙️',
+    label: 'Meeting Tasks',
+    color: 'emerald',
+    bgClass: 'bg-emerald-900/20',
+    borderClass: 'border-l-emerald-500',
+    hoverBgClass: 'hover:bg-emerald-900/30'
   }
 };
 
