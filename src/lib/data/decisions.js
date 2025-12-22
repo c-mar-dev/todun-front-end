@@ -2,366 +2,210 @@
 // Used by all views: main queue, inbox, focus, and entity timeline
 
 export const mockDecisions = [
-  // Urgent items
+  // --- 1. Triage Card ---
   {
-    id: 'd1',
+    id: 'd_triage1',
     decisionType: 'triage',
     status: 'pending',
-    subject: { type: 'task', id: 'task1', title: '[URGENT] Fix production auth bug', source: 'email' },
-    project: 'Backend API',
-    question: 'What should happen with this task?',
-    options: [
-      { key: 'specify', label: 'Specify for AI', description: 'Needs more detail before Claude can execute' },
-      { key: 'execute', label: 'Execute directly', description: 'Ready for AI to work on' },
-      { key: 'manual', label: 'Do manually', description: "I'll handle this myself" },
-      { key: 'defer', label: 'Defer', description: 'Not right now' }
-    ],
-    created: '15m ago',
-    priority: 'urgent'
-  },
-  {
-    id: 'd2',
-    decisionType: 'review',
-    status: 'pending',
-    subject: { type: 'task', id: 'task2', title: 'Database migration script', source: 'manual' },
-    project: 'Backend API',
-    question: 'Review Claude\'s work',
-    preview: 'Claude has prepared a migration script that adds user_preferences table with 3 columns. Includes rollback logic.',
-    options: [
-      { key: 'approve', label: 'Approve', description: 'Looks good, proceed' },
-      { key: 'revise', label: 'Request changes', description: 'Needs modifications' },
-      { key: 'reject', label: 'Reject', description: 'Start over' }
-    ],
-    created: '1h ago',
-    priority: 'urgent'
-  },
-
-  // Transcript enrichments
-  {
-    id: 'd3',
-    decisionType: 'enrich',
-    status: 'pending',
-    subject: { type: 'transcript', id: 't1', title: 'Product Meeting Dec 12' },
-    project: null,
-    question: 'Help me understand this transcript',
-    fields: [
-      { key: 'project', label: 'Which project is this for?', type: 'select', options: ['Q1 Planning', 'Backend API', 'Mobile App', 'Marketing Site', 'Other'] },
-      { key: 'speakers', label: 'Who are the speakers?', type: 'text', placeholder: 'e.g., John (PM), Sarah (Eng), Mike (Design)' },
-      { key: 'context', label: 'Any additional context?', type: 'textarea', placeholder: 'Optional notes about this meeting...' }
-    ],
-    created: '2h ago',
-    priority: 'normal'
-  },
-  {
-    id: 'd4',
-    decisionType: 'enrich',
-    status: 'pending',
-    subject: { type: 'transcript', id: 't2', title: 'Customer Call - Acme Corp' },
-    project: null,
-    question: 'Help me understand this transcript',
-    fields: [
-      { key: 'project', label: 'Which project is this for?', type: 'select', options: ['Q1 Planning', 'Backend API', 'Mobile App', 'Marketing Site', 'Acme Onboarding', 'Other'] },
-      { key: 'speakers', label: 'Who are the speakers?', type: 'text', placeholder: 'e.g., John (PM), Sarah (Eng), Mike (Design)' },
-      { key: 'context', label: 'Any additional context?', type: 'textarea', placeholder: 'Optional notes about this meeting...' }
-    ],
-    created: '3h ago',
-    priority: 'normal'
-  },
-  {
-    id: 'd5',
-    decisionType: 'enrich',
-    status: 'pending',
-    subject: { type: 'transcript', id: 't3', title: 'Weekly Standup Recording' },
-    project: null,
-    question: 'Help me understand this transcript',
-    fields: [
-      { key: 'project', label: 'Which project is this for?', type: 'select', options: ['Q1 Planning', 'Backend API', 'Mobile App', 'Marketing Site', 'Internal', 'Other'] },
-      { key: 'speakers', label: 'Who are the speakers?', type: 'text', placeholder: 'e.g., John (PM), Sarah (Eng), Mike (Design)' },
-      { key: 'context', label: 'Any additional context?', type: 'textarea', placeholder: 'Optional notes about this meeting...' }
-    ],
-    created: '5h ago',
-    priority: 'normal'
-  },
-
-  // Task triages
-  {
-    id: 'd6',
-    decisionType: 'triage',
-    status: 'pending',
-    subject: { type: 'task', id: 'task3', title: 'Write API documentation for /users endpoint', source: 'todoist' },
-    project: 'Backend API',
-    question: 'What should happen with this task?',
-    options: [
-      { key: 'specify', label: 'Specify for AI', description: 'Needs more detail before Claude can execute' },
-      { key: 'execute', label: 'Execute directly', description: 'Ready for AI to work on' },
-      { key: 'manual', label: 'Do manually', description: "I'll handle this myself" },
-      { key: 'defer', label: 'Defer', description: 'Not right now' }
-    ],
-    created: '1h ago',
-    priority: 'normal'
-  },
-  {
-    id: 'd7',
-    decisionType: 'triage',
-    status: 'pending',
-    subject: { type: 'task', id: 'task4', title: 'Update landing page hero section', source: 'todoist' },
-    project: 'Marketing Site',
-    question: 'What should happen with this task?',
-    options: [
-      { key: 'specify', label: 'Specify for AI', description: 'Needs more detail before Claude can execute' },
-      { key: 'execute', label: 'Execute directly', description: 'Ready for AI to work on' },
-      { key: 'manual', label: 'Do manually', description: "I'll handle this myself" },
-      { key: 'defer', label: 'Defer', description: 'Not right now' }
-    ],
-    created: '2h ago',
-    priority: 'normal'
-  },
-  {
-    id: 'd8',
-    decisionType: 'triage',
-    status: 'pending',
-    subject: { type: 'task', id: 'task5', title: 'Prepare Q1 roadmap presentation', source: 'calendar' },
+    subject: { type: 'task', id: 't_triage1', title: 'Write Q1 report', source: 'todoist', originalText: 'Write Q1 report, need by EOY' },
     project: 'Q1 Planning',
-    question: 'What should happen with this task?',
-    options: [
-      { key: 'specify', label: 'Specify for AI', description: 'Needs more detail before Claude can execute' },
-      { key: 'execute', label: 'Execute directly', description: 'Ready for AI to work on' },
-      { key: 'manual', label: 'Do manually', description: "I'll handle this myself" },
-      { key: 'defer', label: 'Defer', description: 'Not right now' }
-    ],
-    created: '4h ago',
-    priority: 'normal'
-  },
-  {
-    id: 'd9',
-    decisionType: 'triage',
-    status: 'pending',
-    subject: { type: 'task', id: 'task6', title: 'Review competitor pricing pages', source: 'manual' },
-    project: 'Marketing Site',
-    question: 'What should happen with this task?',
-    options: [
-      { key: 'specify', label: 'Specify for AI', description: 'Needs more detail before Claude can execute' },
-      { key: 'execute', label: 'Execute directly', description: 'Ready for AI to work on' },
-      { key: 'manual', label: 'Do manually', description: "I'll handle this myself" },
-      { key: 'defer', label: 'Defer', description: 'Not right now' }
-    ],
-    created: '1d ago',
-    priority: 'normal'
+    priority: 'normal',
+    question: 'Route this item',
+    created: '2m ago',
+    data: {
+      destination: ['Quick Win (Todoist)', 'Project Task (Obsidian)', 'Reference'],
+      suggestedDestination: 'Project Task (Obsidian)',
+      suggestedProject: 'Q1 Planning',
+      suggestedPriority: 'p2'
+    }
   },
 
-  // Specifications
+  // --- 2. Specification Card ---
   {
-    id: 'd10',
+    id: 'd_spec1',
     decisionType: 'specify',
     status: 'pending',
-    subject: { type: 'task', id: 'task7', title: 'Implement user settings page', source: 'transcript', parentTitle: 'Product Meeting Dec 12' },
-    project: 'Mobile App',
-    question: 'Give Claude the details needed to work on this',
-    fields: [
-      { key: 'outcome', label: 'What specific outcome do you want?', type: 'textarea', placeholder: 'Describe the desired result...' },
-      { key: 'files', label: 'Relevant files or context', type: 'text', placeholder: 'Link files or add notes...' },
-      { key: 'constraints', label: 'Any constraints or requirements?', type: 'text', placeholder: 'e.g., must match existing design system' }
-    ],
-    created: '3h ago',
-    priority: 'normal'
-  },
-  {
-    id: 'd11',
-    decisionType: 'specify',
-    status: 'pending',
-    subject: { type: 'task', id: 'task8', title: 'Create onboarding email sequence', source: 'todoist' },
-    project: 'Marketing Site',
-    question: 'Give Claude the details needed to work on this',
-    fields: [
-      { key: 'outcome', label: 'What specific outcome do you want?', type: 'textarea', placeholder: 'Describe the desired result...' },
-      { key: 'files', label: 'Relevant files or context', type: 'text', placeholder: 'Link files or add notes...' },
-      { key: 'constraints', label: 'Any constraints or requirements?', type: 'text', placeholder: 'e.g., tone should be friendly but professional' }
-    ],
-    created: '6h ago',
-    priority: 'normal'
-  },
-  {
-    id: 'd12',
-    decisionType: 'specify',
-    status: 'pending',
-    subject: { type: 'task', id: 'task9', title: 'Write unit tests for auth module', source: 'manual' },
-    project: 'Backend API',
-    question: 'Give Claude the details needed to work on this',
-    fields: [
-      { key: 'outcome', label: 'What specific outcome do you want?', type: 'textarea', placeholder: 'Describe the desired result...' },
-      { key: 'files', label: 'Relevant files or context', type: 'text', placeholder: 'Link files or add notes...' },
-      { key: 'constraints', label: 'Any constraints or requirements?', type: 'text', placeholder: 'e.g., use pytest, aim for 80% coverage' }
-    ],
-    created: '1d ago',
-    priority: 'normal'
-  },
-
-  // Reviews
-  {
-    id: 'd13',
-    decisionType: 'review',
-    status: 'pending',
-    subject: { type: 'task', id: 'task10', title: 'Refactor notification service', source: 'todoist' },
-    project: 'Backend API',
-    question: 'Review Claude\'s work',
-    preview: 'Claude refactored the notification service into 3 separate modules: email, push, and SMS. Added retry logic and rate limiting.',
-    options: [
-      { key: 'approve', label: 'Approve', description: 'Looks good, proceed' },
-      { key: 'revise', label: 'Request changes', description: 'Needs modifications' },
-      { key: 'reject', label: 'Reject', description: 'Start over' }
-    ],
-    created: '2h ago',
-    priority: 'normal'
-  },
-  {
-    id: 'd14',
-    decisionType: 'review',
-    status: 'pending',
-    subject: { type: 'task', id: 'task11', title: 'Design system color tokens', source: 'manual' },
-    project: 'Mobile App',
-    question: 'Review Claude\'s work',
-    preview: 'Claude created a comprehensive color token system with light/dark mode variants. Includes semantic naming and accessibility notes.',
-    options: [
-      { key: 'approve', label: 'Approve', description: 'Looks good, proceed' },
-      { key: 'revise', label: 'Request changes', description: 'Needs modifications' },
-      { key: 'reject', label: 'Reject', description: 'Start over' }
-    ],
-    created: '5h ago',
-    priority: 'normal'
-  },
-
-  // Email categorizations
-  {
-    id: 'd15',
-    decisionType: 'categorize',
-    status: 'pending',
-    subject: { type: 'email', id: 'e1', title: 'Re: Partnership proposal', from: 'partner@example.com' },
-    project: null,
-    question: 'What kind of input is this?',
-    options: [
-      { key: 'task_source', label: 'Contains tasks', description: 'Extract action items from this' },
-      { key: 'reference', label: 'Reference material', description: 'Save for context but no tasks' },
-      { key: 'ignore', label: 'Ignore', description: 'Not relevant' }
-    ],
-    created: '30m ago',
-    priority: 'normal'
-  },
-  {
-    id: 'd16',
-    decisionType: 'categorize',
-    status: 'pending',
-    subject: { type: 'email', id: 'e2', title: 'Bug report: Login issues on Safari', from: 'user@customer.com' },
-    project: null,
-    question: 'What kind of input is this?',
-    options: [
-      { key: 'task_source', label: 'Contains tasks', description: 'Extract action items from this' },
-      { key: 'reference', label: 'Reference material', description: 'Save for context but no tasks' },
-      { key: 'ignore', label: 'Ignore', description: 'Not relevant' }
-    ],
-    created: '1h ago',
-    priority: 'normal'
-  },
-  {
-    id: 'd17',
-    decisionType: 'categorize',
-    status: 'pending',
-    subject: { type: 'email', id: 'e3', title: 'Invoice #4521 - December', from: 'billing@vendor.com' },
-    project: null,
-    question: 'What kind of input is this?',
-    options: [
-      { key: 'task_source', label: 'Contains tasks', description: 'Extract action items from this' },
-      { key: 'reference', label: 'Reference material', description: 'Save for context but no tasks' },
-      { key: 'ignore', label: 'Ignore', description: 'Not relevant' }
-    ],
-    created: '3h ago',
-    priority: 'normal'
-  },
-  {
-    id: 'd18',
-    decisionType: 'categorize',
-    status: 'pending',
-    subject: { type: 'email', id: 'e4', title: 'Meeting notes: Acme sync', from: 'colleague@company.com' },
-    project: null,
-    question: 'What kind of input is this?',
-    options: [
-      { key: 'task_source', label: 'Contains tasks', description: 'Extract action items from this' },
-      { key: 'reference', label: 'Reference material', description: 'Save for context but no tasks' },
-      { key: 'ignore', label: 'Ignore', description: 'Not relevant' }
-    ],
-    created: '4h ago',
-    priority: 'normal'
-  },
-
-  // Meeting task extractions (enriched transcripts ready for task selection)
-  {
-    id: 'd_mt1',
-    decisionType: 'meeting_triage',
-    status: 'pending',
-    subject: {
-      type: 'transcript',
-      id: 'mt1',
-      title: 'Q1 Planning Kickoff',
-      date: 'Dec 10, 2024',
-      duration: '52 min'
-    },
+    subject: { type: 'task', id: 't_spec1', title: 'Write Q1 report', source: 'todoist' },
     project: 'Q1 Planning',
-    question: 'Which tasks from this meeting should be added to your queue?',
-    extractedTasks: [
-      { id: 'mt1_t1', title: 'Draft Q1 OKRs document', assignee: 'You', priority: 'high' },
-      { id: 'mt1_t2', title: 'Schedule 1:1s with team leads', assignee: 'You', priority: 'normal' },
-      { id: 'mt1_t3', title: 'Review budget allocation spreadsheet', assignee: 'Team', priority: 'normal' },
-      { id: 'mt1_t4', title: 'Set up Q1 project tracking board', assignee: 'You', priority: 'normal' },
-      { id: 'mt1_t5', title: 'Send recap email to stakeholders', assignee: 'You', priority: 'high' }
-    ],
-    created: '2h ago',
-    priority: 'normal'
+    priority: 'high',
+    question: 'Define spec',
+    created: '5m ago',
+    data: {
+      context: 'Project [[Q1 Planning]], Source: Todoist',
+      aiSpec: {
+        objective: 'Draft a comprehensive Q1 report covering key metrics and achievements.',
+        targetAudience: 'Executive Team',
+        format: 'PDF Report',
+        keyThemes: 'Economic impact, legislative feasibility'
+      },
+      successCriteria: [
+        { id: 'sc1', text: 'Must include executive summary', checked: true },
+        { id: 'sc2', text: 'Must cite at least 3 sources', checked: true }
+      ],
+      contextFiles: [
+        { name: 'Q1 Planning', status: 'included' },
+        { name: 'Q4 Report', status: 'excluded', reason: 'outdated' }
+      ]
+    }
   },
+
+  // --- 3. Clarification Card ---
   {
-    id: 'd_mt2',
-    decisionType: 'meeting_triage',
+    id: 'd_clarify1',
+    decisionType: 'clarifying',
     status: 'pending',
-    subject: {
-      type: 'transcript',
-      id: 'mt2',
-      title: 'Backend API Sprint Review',
-      date: 'Dec 12, 2024',
-      duration: '38 min'
-    },
+    subject: { type: 'task', id: 't_clarify1', title: 'Write Q1 report', source: 'manual' },
+    project: 'Legal Compliance',
+    priority: 'urgent',
+    question: 'Claude needs 3 answers before starting',
+    created: '10m ago',
+    clarificationQuestions: [
+      { id: 'q1', type: 'choice', text: 'You mentioned "the standard format" - do you mean:', options: ['Internal Brief format', 'External Publication format', 'Other'] },
+      { id: 'q2', type: 'text', text: 'I see "Senator Smith" in context, but no recent meeting notes. Should I rely on his 2023 voting record, or do you have newer intel?' },
+      { id: 'q3', type: 'number', text: 'What is the maximum word count?' }
+    ]
+  },
+
+  // --- 4. Verification Card ---
+  {
+    id: 'd_verify1',
+    decisionType: 'verifying',
+    status: 'pending',
+    subject: { type: 'task', id: 't_verify1', title: 'Write Q1 report', source: 'todoist' },
+    project: 'Marketing Site',
+    priority: 'high',
+    question: 'Verification Results',
+    created: '5m ago',
+    data: {
+      attempt: 2,
+      maxAttempts: 3,
+      verifier: 'Claude Sonnet',
+      criteriaResults: [
+        { text: 'Must include executive summary', status: 'pass', note: 'PASS' },
+        { text: 'Must cite at least 3 sources', status: 'pass', note: 'PASS - found 4' },
+        { text: 'Tone must be "Neutral/Academic"', status: 'fail', note: 'FAIL - too persuasive' },
+        { text: 'Word count 400-600', status: 'pass', note: 'PASS - 523 words' }
+      ],
+      feedback: 'The introduction uses persuasive language ("clearly" and "obviously"). Suggest replacing with neutral alternatives.'
+    }
+  },
+
+  // --- 5. Review Card ---
+  {
+    id: 'd_review1',
+    decisionType: 'review',
+    status: 'pending',
+    subject: { type: 'task', id: 't_review1', title: 'Write Q1 report', source: 'manual' },
     project: 'Backend API',
-    question: 'Which tasks from this meeting should be added to your queue?',
-    extractedTasks: [
-      { id: 'mt2_t1', title: 'Fix rate limiting bug in /users endpoint', assignee: 'You', priority: 'high' },
-      { id: 'mt2_t2', title: 'Add pagination to search results', assignee: 'Team', priority: 'normal' },
-      { id: 'mt2_t3', title: 'Update API documentation for v2 changes', assignee: 'You', priority: 'normal' },
-      { id: 'mt2_t4', title: 'Review PR #423 for auth improvements', assignee: 'You', priority: 'normal' }
-    ],
-    created: '45m ago',
-    priority: 'normal'
+    priority: 'urgent',
+    question: 'Review work',
+    created: '1h ago',
+    data: {
+      completedBy: 'Claude (2 attempts)',
+      verified: true,
+      specSummary: {
+        objective: 'Draft Q1 report...',
+        criteria: ['Executive summary', '3+ citations', 'Neutral tone', '400-600 words']
+      },
+      resultSummary: {
+        preview: 'Executive Summary:\nThe Q1 report outlines...',
+        fullDocLink: '#',
+        diffLink: '#'
+      }
+    }
   },
+
+  // --- 6. Conflict Card ---
   {
-    id: 'd_mt3',
-    decisionType: 'meeting_triage',
+    id: 'd_conflict1',
+    decisionType: 'conflict',
     status: 'pending',
-    subject: {
-      type: 'transcript',
-      id: 'mt3',
-      title: 'Design Review - Mobile App Redesign',
-      date: 'Dec 13, 2024',
-      duration: '1h 15min'
-    },
-    project: 'Mobile App',
-    question: 'Which tasks from this meeting should be added to your queue?',
-    extractedTasks: [
-      { id: 'mt3_t1', title: 'Create high-fidelity mockups for onboarding flow', assignee: 'Team', priority: 'high' },
-      { id: 'mt3_t2', title: 'Audit current color palette for accessibility', assignee: 'You', priority: 'normal' },
-      { id: 'mt3_t3', title: 'Prototype new navigation pattern', assignee: 'You', priority: 'high' },
-      { id: 'mt3_t4', title: 'Write design system documentation', assignee: 'Team', priority: 'normal' },
-      { id: 'mt3_t5', title: 'Schedule user testing sessions', assignee: 'You', priority: 'normal' },
-      { id: 'mt3_t6', title: 'Review competitor app UX patterns', assignee: 'You', priority: 'normal' }
-    ],
-    created: '20m ago',
-    priority: 'urgent'
+    subject: { type: 'task', id: 't_conflict1', title: 'Write Q1 report', source: 'manual' },
+    priority: 'urgent',
+    question: 'Conflict detected',
+    created: 'Just now',
+    data: {
+      myVersion: {
+        seq: 47,
+        modified: '2 min ago',
+        by: 'You (Obsidian)',
+        changes: ['priority: p2', '_state: specifying']
+      },
+      incomingVersion: {
+        seq: 47,
+        modified: '1 min ago',
+        by: 'Claude (worker)',
+        changes: ['priority: p1', '_state: specified']
+      }
+    }
   },
+
+  // --- 7. Escalation Card ---
+  {
+    id: 'd_escalate1',
+    decisionType: 'escalate',
+    status: 'pending',
+    subject: { type: 'task', id: 't_escalate1', title: 'Write Q1 report', source: 'manual' },
+    priority: 'urgent',
+    question: 'Needs your help',
+    created: '5m ago',
+    data: {
+      reason: 'Max retries exceeded',
+      attempts: 3,
+      lastError: 'Criterion #2 failed',
+      history: [
+        'Attempt 1: "Tone too persuasive" -> Retried with feedback',
+        'Attempt 2: "Still using \'clearly\'" -> Retried with feedback',
+        'Attempt 3: "Word \'obviously\' found" -> Max retries exceeded'
+      ],
+      draftPreview: '"The Q1 results clearly show that our strategy is working..."'
+    }
+  },
+
+  // --- 8. Enrichment Card ---
+  {
+    id: 'd_enrich1',
+    decisionType: 'enrich',
+    status: 'pending',
+    subject: { type: 'transcript', id: 't_enrich1', title: 'team-meeting-2024-12-15.md', source: 'upload' },
+    project: null,
+    priority: 'normal',
+    question: 'Enrich transcript',
+    created: '2h ago',
+    data: {
+      duration: '45 min',
+      autoDetected: 'Product discussion',
+      preview: '...so for Q1 we need to prioritize the mobile app launch...', 
+      suggestedProject: 'Product Launch',
+      speakers: [
+        { name: 'John Smith (Product)', selected: true },
+        { name: 'Sarah Chen (Engineering)', selected: true }
+      ],
+      date: 'Dec 15, 2024'
+    }
+  },
+
+  // --- 9. Extraction Confirmation Card ---
+  {
+    id: 'd_extract1',
+    decisionType: 'extract',
+    status: 'pending',
+    subject: { type: 'task', id: 't_extract1', title: 'Create Q1 roadmap draft', source: 'transcript' },
+    project: 'Q1 Planning',
+    priority: 'high',
+    question: 'Confirm extracted task',
+    created: '10m ago',
+    data: {
+      sourceTitle: 'Q4 Planning Meeting',
+      progress: '1 of 4',
+      owner: 'me',
+      due: 'Dec 15',
+      quote: '...agreed to have draft ready for exec review by the 15th...', 
+      confidence: 'high', // high, medium, low
+      suggestedProject: 'Q1 Planning',
+      suggestedPriority: 'p2'
+    }
+  }
 ];
 
 // Decision type configuration with colors and styling
@@ -414,6 +258,46 @@ export const decisionTypeConfig = {
     borderClass: 'border-l-emerald-500',
     hoverBgClass: 'hover:bg-emerald-900/30'
   },
+  clarifying: {
+    icon: '🤔',
+    label: 'Clarify',
+    color: 'yellow',
+    bgClass: 'bg-yellow-900/20 border-yellow-500 shadow-[0_0_15px_rgba(234,179,8,0.2)]', // Glow effect
+    borderClass: 'border-l-yellow-500',
+    hoverBgClass: 'hover:bg-yellow-900/30'
+  },
+  verifying: {
+    icon: '🛡️',
+    label: 'Verifying',
+    color: 'purple',
+    bgClass: 'bg-purple-900/20',
+    borderClass: 'border-l-purple-500',
+    hoverBgClass: 'hover:bg-purple-900/30'
+  },
+  conflict: {
+    icon: '⚔️',
+    label: 'Conflict',
+    color: 'red',
+    bgClass: 'bg-red-900/20',
+    borderClass: 'border-l-red-500',
+    hoverBgClass: 'hover:bg-red-900/30'
+  },
+  escalate: {
+    icon: '🚨',
+    label: 'Escalate',
+    color: 'red',
+    bgClass: 'bg-red-900/30 border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.2)]',
+    borderClass: 'border-l-red-500',
+    hoverBgClass: 'hover:bg-red-900/40'
+  },
+  extract: {
+    icon: '⛏️',
+    label: 'Extract',
+    color: 'green',
+    bgClass: 'bg-green-900/20',
+    borderClass: 'border-l-green-500',
+    hoverBgClass: 'hover:bg-green-900/30'
+  }
 };
 
 // Thing type configuration
@@ -421,6 +305,9 @@ export const thingTypeConfig = {
   task: { icon: '✓', label: 'Tasks' },
   transcript: { icon: '🎙️', label: 'Transcripts' },
   email: { icon: '✉️', label: 'Emails' },
+  source: { icon: '📄', label: 'Sources' },
+  project: { icon: '🚀', label: 'Projects' },
+  person: { icon: '👤', label: 'People' }
 };
 
 // Known speakers for autocomplete
@@ -453,117 +340,8 @@ export const entityHistory = {
         source: 'email',
         priority: 'urgent'
       }
-    },
-    {
-      state: 'categorized',
-      timestamp: '2024-12-14 08:32',
-      input: { action: 'task_source', from: 'support@company.com' },
-      output: { extracted: true, taskCreated: true }
-    },
-    {
-      state: 'triaged',
-      timestamp: '2024-12-14 08:45',
-      input: { action: 'specify', reason: 'Needs reproduction steps' },
-      output: { assignedTo: 'AI', nextStep: 'specify' }
-    },
-  ],
-  'task2': [
-    {
-      state: 'created',
-      timestamp: '2024-12-13 14:00',
-      input: null,
-      output: {
-        title: 'Database migration script',
-        source: 'manual'
-      }
-    },
-    {
-      state: 'triaged',
-      timestamp: '2024-12-13 14:15',
-      input: { action: 'execute', reason: 'Clear requirements' },
-      output: { assignedTo: 'AI', nextStep: 'execute' }
-    },
-    {
-      state: 'executed',
-      timestamp: '2024-12-13 15:30',
-      input: { prompt: 'Create migration for user_preferences table' },
-      output: {
-        filesCreated: ['migrations/001_user_preferences.sql'],
-        summary: 'Migration script with rollback logic'
-      }
-    },
-    {
-      state: 'pending_review',
-      timestamp: '2024-12-13 15:31',
-      input: null,
-      output: {
-        preview: 'Claude has prepared a migration script that adds user_preferences table with 3 columns. Includes rollback logic.',
-        awaitingAction: 'review'
-      }
-    },
-  ],
-  'task3': [
-    {
-      state: 'created',
-      timestamp: '2024-12-14 07:00',
-      input: null,
-      output: {
-        title: 'Write API documentation for /users endpoint',
-        source: 'todoist'
-      }
-    },
-  ],
-  't1': [
-    {
-      state: 'recorded',
-      timestamp: '2024-12-12 10:00',
-      input: null,
-      output: {
-        title: 'Product Meeting Dec 12',
-        duration: '45 minutes',
-        participants: 'Unknown'
-      }
-    },
-    {
-      state: 'transcribed',
-      timestamp: '2024-12-12 10:50',
-      input: { audioFile: 'meeting_dec12.mp3' },
-      output: {
-        wordCount: 4500,
-        confidence: 0.94
-      }
-    },
-    {
-      state: 'pending_enrichment',
-      timestamp: '2024-12-12 10:51',
-      input: null,
-      output: {
-        awaitingAction: 'enrich',
-        fieldsNeeded: ['project', 'speakers', 'context']
-      }
-    },
-  ],
-  'e1': [
-    {
-      state: 'received',
-      timestamp: '2024-12-14 09:00',
-      input: null,
-      output: {
-        title: 'Re: Partnership proposal',
-        from: 'partner@example.com',
-        hasAttachments: false
-      }
-    },
-    {
-      state: 'pending_categorization',
-      timestamp: '2024-12-14 09:01',
-      input: null,
-      output: {
-        awaitingAction: 'categorize',
-        suggestedCategory: 'task_source'
-      }
-    },
-  ],
+    }
+  ]
 };
 
 // Helper to get entity info by ID
