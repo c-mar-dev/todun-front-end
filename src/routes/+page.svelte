@@ -162,12 +162,6 @@
     showToast(`${name}: ${decision.subject.title}`, 'success');
     lastAction = { type: 'action', name, decision, previousIndex: selectedIndex, timestamp: Date.now() };
     
-    // Special handling for meeting tasks confirmation if needed
-    if (name === 'Confirm Meeting Tasks' && payload?.selectedTasks) {
-       // Logic to create new tasks could go here
-       console.log('Confirmed tasks:', payload.selectedTasks);
-    }
-
     markAsCompleted(decision.id);
     moveToNextDecision();
   }
@@ -255,6 +249,7 @@
       case 's': event.preventDefault(); handleSkip(); break;
       case 'c': event.preventDefault(); clearFilters(); showToast('Filters cleared', 'info'); break;
       case '?': event.preventDefault(); showSettings = true; break;
+      case 'l': case 'ArrowRight': event.preventDefault(); detailPanelEl?.querySelector('input, textarea, select, button.action-btn')?.focus(); break;
       case 'i': event.preventDefault(); goto('/inbox'); break;
       case 'f': event.preventDefault(); goto('/focus'); break;
     }
@@ -273,21 +268,33 @@
   // --- Command Palette ---
   function getCommands() {
     return [
-      { id: 'nav-up', label: 'Previous', action: () => { if (selectedIndex > 0) selectedIndex--; scrollToSelected(); } },
-      { id: 'nav-down', label: 'Next', action: () => { if (selectedIndex < filteredDecisions.length - 1) selectedIndex++; scrollToSelected(); } },
+      { id: 'nav-up', label: 'Previous item', action: () => { if (selectedIndex > 0) selectedIndex--; scrollToSelected(); } },
+      { id: 'nav-down', label: 'Next item', action: () => { if (selectedIndex < filteredDecisions.length - 1) selectedIndex++; scrollToSelected(); } },
       { id: 'filter-all', label: 'All Stages', action: () => { stageFilter = 'all'; } },
+      { id: 'filter-urgent', label: 'Urgent Only', action: () => { stageFilter = 'urgent'; } },
       { id: 'action-skip', label: 'Skip', action: handleSkip },
-      { id: 'view-inbox', label: 'Inbox', action: () => goto('/inbox') }
+      { id: 'view-inbox', label: 'Inbox', action: () => goto('/inbox') },
+      { id: 'view-focus', label: 'Focus Mode', action: () => goto('/focus') },
+      { id: 'view-agents', label: 'Agents Status', action: () => goto('/agents') },
+      { id: 'settings', label: 'Keyboard Shortcuts', action: () => showSettings = true }
     ];
   }
   $: commands = getCommands();
   $: filteredCommands = commandSearch ? commands.filter(c => c.label.toLowerCase().includes(commandSearch.toLowerCase())) : commands;
   
   function handleCommandPaletteKeydown(event) {
-    if (event.key === 'ArrowUp') commandIndex = Math.max(0, commandIndex - 1);
-    else if (event.key === 'ArrowDown') commandIndex = Math.min(filteredCommands.length - 1, commandIndex + 1);
-    else if (event.key === 'Enter' && filteredCommands[commandIndex]) { showCommandPalette = false; filteredCommands[commandIndex].action(); }
+    if (event.key === 'ArrowUp') { event.preventDefault(); commandIndex = Math.max(0, commandIndex - 1); }
+    else if (event.key === 'ArrowDown') { event.preventDefault(); commandIndex = Math.min(filteredCommands.length - 1, commandIndex + 1); }
+    else if (event.key === 'Enter') { 
+        event.preventDefault(); 
+        if (filteredCommands[commandIndex]) { 
+            showCommandPalette = false; 
+            filteredCommands[commandIndex].action(); 
+        } 
+    }
   }
+  
+  $: commandSearch, commandIndex = 0;
 </script>
 
 <svelte:window on:keydown={handleKeydown} on:click={closeDropdowns} />
@@ -326,6 +333,7 @@
            <button on:click={() => showTaskCreationModal = true} class="px-3 py-1.5 bg-amber-600 hover:bg-amber-500 text-white rounded-md text-sm font-medium transition-colors">+ New Task</button>
            <a href="/inbox" class="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 rounded-md text-sm transition-colors">Inbox</a>
            <a href="/focus" class="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 rounded-md text-sm transition-colors">Focus</a>
+           <a href="/agents" class="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 rounded-md text-sm transition-colors">Agents</a>
         </div>
       </div>
 
@@ -455,13 +463,94 @@
   </div>
 </div>
 
+<!-- Command Palette Modal -->
+{#if showCommandPalette}
+  <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+  <div
+    class="fixed inset-0 bg-black/60 z-50 flex items-start justify-center pt-[15vh]"
+    on:click={() => showCommandPalette = false}
+    on:keydown={(e) => e.key === 'Escape' && (showCommandPalette = false)}
+    role="dialog"
+    aria-modal="true"
+    aria-label="Command palette"
+  >
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <div
+      class="bg-zinc-800 rounded-xl w-full max-w-lg shadow-2xl border border-zinc-700 overflow-hidden"
+      on:click|stopPropagation
+    >
+      <!-- Search input -->
+      <div class="p-4 border-b border-zinc-700 flex items-center gap-3">
+        <span class="text-zinc-500">🔍</span>
+        <input
+          type="text"
+          placeholder="Type a command..."
+          class="w-full bg-transparent text-zinc-100 text-lg outline-none placeholder-zinc-500"
+          bind:value={commandSearch}
+          autofocus
+        />
+        <kbd class="text-xs bg-zinc-700 px-2 py-1 rounded text-zinc-400">Esc</kbd>
+      </div>
+
+      <!-- Command list -->
+      <div class="max-h-80 overflow-y-auto p-2">
+        {#if filteredCommands.length === 0}
+          <div class="text-center py-4 text-zinc-500">
+            No commands found
+          </div>
+        {:else}
+          {#each filteredCommands as command, i}
+            <button
+              class="w-full text-left px-3 py-2 rounded flex items-center justify-between transition-colors
+                     {commandIndex === i ? 'bg-amber-600/20 text-amber-100' : 'hover:bg-zinc-700 text-zinc-200'}"
+              on:click={() => { showCommandPalette = false; command.action(); }}
+              on:mouseenter={() => commandIndex = i}
+            >
+              <div class="flex items-center gap-3">
+                <span class="text-zinc-500">►</span>
+                <span>{command.label}</span>
+              </div>
+            </button>
+          {/each}
+        {/if}
+      </div>
+
+      <!-- Footer -->
+      <div class="p-3 border-t border-zinc-700 text-xs text-zinc-500 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <span><kbd class="bg-zinc-700 px-1.5 py-0.5 rounded text-zinc-400">↑↓</kbd> navigate</span>
+          <span><kbd class="bg-zinc-700 px-1.5 py-0.5 rounded text-zinc-400">Enter</kbd> select</span>
+        </div>
+      </div>
+    </div>
+  </div>
+{/if}
+
+<!-- Settings Modal (Restored) -->
+{#if showSettings}
+  <div class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center" on:click={() => showSettings = false}>
+    <div class="bg-zinc-800 rounded-xl w-full max-w-md p-6 shadow-2xl border border-zinc-700" on:click|stopPropagation>
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-lg font-semibold text-zinc-100">Keyboard Shortcuts</h2>
+        <button on:click={() => showSettings = false} class="text-zinc-500 hover:text-zinc-300">×</button>
+      </div>
+      <div class="space-y-2 text-sm text-zinc-300">
+        <div class="flex justify-between"><span>Open Command Palette</span><kbd class="bg-zinc-700 px-2 rounded">o</kbd></div>
+        <div class="flex justify-between"><span>Navigation</span><kbd class="bg-zinc-700 px-2 rounded">↑ / ↓</kbd></div>
+        <div class="flex justify-between"><span>Skip Decision</span><kbd class="bg-zinc-700 px-2 rounded">s</kbd></div>
+        <div class="flex justify-between"><span>Focus Search</span><kbd class="bg-zinc-700 px-2 rounded">/</kbd></div>
+      </div>
+    </div>
+  </div>
+{/if}
+
 <!-- Output any modals if they are open -->
 {#if showClarificationModal}
   <ClarificationModal
     taskTitle={clarificationTask?.subject?.title}
     questions={clarificationQuestions}
     on:close={() => showClarificationModal = false}
-    on:submit={() => {/* Not used here anymore, logic moved/handled differently or pending implementation in DecisionCard */}}
+    on:submit={() => {/* Handled via decision updates mainly */}}
   />
 {/if}
 

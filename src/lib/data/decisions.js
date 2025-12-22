@@ -275,34 +275,129 @@ export const mockDecisions = [
         }
       },
     
-      // 13. Meeting Triage (Restored)
-      {
-        id: 'd_mt1',
-        decisionType: 'meeting_triage',
-        status: 'pending',
-        subject: {
-          type: 'transcript',
-          id: 'mt1',
-          title: 'Q1 Planning Kickoff',
-          source: 'zoom',
-          date: 'Dec 10, 2024',
-          duration: '52 min'
+        // 13. Meeting Triage (Restored)
+    
+        {
+    
+          id: 'd_mt1',
+    
+          decisionType: 'meeting_triage',
+    
+          status: 'pending',
+    
+          subject: {
+    
+            type: 'transcript',
+    
+            id: 'mt1',
+    
+            title: 'Q1 Planning Kickoff',
+    
+            source: 'zoom',
+    
+            date: 'Dec 10, 2024',
+    
+            duration: '52 min'
+    
+          },
+    
+          project: 'Q1 Planning',
+    
+          priority: 'normal',
+    
+          question: 'Which tasks from this meeting should be added to your queue?',
+    
+          created: '2h ago',
+    
+          data: {
+    
+            extractedTasks: [
+    
+              { id: 'mt1_t1', title: 'Draft Q1 OKRs document', assignee: 'You', priority: 'high', checked: true },
+    
+              { id: 'mt1_t2', title: 'Schedule 1:1s with team leads', assignee: 'You', priority: 'normal', checked: false },
+    
+              { id: 'mt1_t3', title: 'Review budget allocation spreadsheet', assignee: 'Team', priority: 'normal', checked: false },
+    
+              { id: 'mt1_t4', title: 'Set up Q1 project tracking board', assignee: 'You', priority: 'normal', checked: true },
+    
+              { id: 'mt1_t5', title: 'Send recap email to stakeholders', assignee: 'You', priority: 'high', checked: false }
+    
+            ]
+    
+          }
+    
         },
-        project: 'Q1 Planning',
-        priority: 'normal',
-        question: 'Which tasks from this meeting should be added to your queue?',
-        created: '2h ago',
-        data: {
-          extractedTasks: [
-            { id: 'mt1_t1', title: 'Draft Q1 OKRs document', assignee: 'You', priority: 'high', checked: true },
-            { id: 'mt1_t2', title: 'Schedule 1:1s with team leads', assignee: 'You', priority: 'normal', checked: false },
-            { id: 'mt1_t3', title: 'Review budget allocation spreadsheet', assignee: 'Team', priority: 'normal', checked: false },
-            { id: 'mt1_t4', title: 'Set up Q1 project tracking board', assignee: 'You', priority: 'normal', checked: true },
-            { id: 'mt1_t5', title: 'Send recap email to stakeholders', assignee: 'You', priority: 'high', checked: false }
+    
+      
+    
+        // 14. Standard Task (From Slack)
+    
+        {
+    
+          id: 'd_triage3',
+    
+          decisionType: 'triage',
+    
+          status: 'pending',
+    
+          subject: { type: 'task', id: 't_slack1', title: 'Update API Docs for v2', source: 'slack', originalText: 'Can you update the docs? They are outdated.' },
+    
+          project: 'Backend API',
+    
+          priority: 'normal',
+    
+          question: 'Route this item',
+    
+          created: '3h ago',
+    
+          data: {
+    
+            destination: ['Quick Win', 'Project Task', 'Delegate'],
+    
+            suggestedDestination: 'Project Task',
+    
+            suggestedProject: 'Backend API',
+    
+            suggestedPriority: 'p2'
+    
+          }
+    
+        },
+    
+      
+    
+        // 15. Clarification (Missing Info)
+    
+        {
+    
+          id: 'd_clarify2',
+    
+          decisionType: 'clarifying',
+    
+          status: 'pending',
+    
+          subject: { type: 'task', id: 't_clarify2', title: 'Prepare slide deck', source: 'manual' },
+    
+          project: 'Marketing',
+    
+          priority: 'normal',
+    
+          question: 'Claude needs answers',
+    
+          created: '4h ago',
+    
+          clarificationQuestions: [
+    
+            { id: 'q1', type: 'text', text: 'Who is the target audience for this presentation?' },
+    
+            { id: 'q2', type: 'choice', text: 'How many slides roughly?', options: ['5-10', '10-20', '20+'] }
+    
           ]
+    
         }
-      }
-    ];// Decision type configuration with colors and styling
+    
+      ];// Decision type configuration with colors and styling
 export const decisionTypeConfig = {
   enrich: {
     icon: '🎙️',
