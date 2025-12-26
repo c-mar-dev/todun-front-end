@@ -66,6 +66,23 @@ $: if (decision && decision.data) {
 
 This pattern applies to all card components that receive a `decision` prop and need to initialize form state from `decision.data`.
 
+## Decision Card Data Gotchas
+
+**Project lists in decision payload**: The `data.projects` field in decision payloads may contain non-project items due to backend MDQ query issues. Always fetch projects via the API endpoint (`/api/projects/`) which has proper filtering:
+
+```svelte
+// WRONG - data.projects may contain tasks
+$: allProjects = [...new Set([...(data.projects || []), ...fetchedProjects])];
+
+// CORRECT - use only API-fetched projects
+$: allProjects = [...fetchedProjects];
+```
+
+When adding project selection to any decision card, use the pattern from `CategorizeCard.svelte`:
+1. Import `projectsApi` from `$lib/api`
+2. Fetch projects in `onMount` using `projectsApi.list({ state: 'active' })`
+3. Use only the API response, don't merge with decision payload data
+
 ## Styling Convention
 
 Uses Tailwind's zinc color palette for dark mode UI with amber as the accent color.

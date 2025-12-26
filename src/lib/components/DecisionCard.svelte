@@ -1,11 +1,12 @@
 <script>
-  import { decisionTypeConfig, thingTypeConfig, allProjects } from '$lib/data/decisions.js';
+  import { decisionTypeConfig, thingTypeConfig } from '$lib/data/decisions.js';
   import CriteriaChecklist from './CriteriaChecklist.svelte';
   import LoadingSpinner from './LoadingSpinner.svelte';
   import SpeakerAutocomplete from './SpeakerAutocomplete.svelte';
-  import { createEventDispatcher } from 'svelte';
+  import { createEventDispatcher, onMount } from 'svelte';
   import { buildResolutionPayload } from '$lib/utils/resolution';
   import { chainHistory, WORKFLOW_ORDER } from '$lib/stores';
+  import { projectsApi } from '$lib/api';
 
   // New modular card components (Unit 12)
   import {
@@ -54,6 +55,23 @@
   let enrichProject = '';
   let enrichDate = '';
   let enrichSpeakers = [];
+
+  // Projects from API (shared by triage and enrich cards)
+  let projects = [];
+  let projectsLoading = false;
+
+  // Fetch projects on mount
+  onMount(async () => {
+    try {
+      projectsLoading = true;
+      const response = await projectsApi.list({ state: 'active' });
+      projects = response.projects.map(p => p.title);
+    } catch (e) {
+      console.error('Failed to fetch projects:', e);
+    } finally {
+      projectsLoading = false;
+    }
+  });
 
   // Initialize form data when decision changes
   $: if (decision) {
@@ -269,11 +287,11 @@
                     <label class="block text-xs text-zinc-500 mb-1">Project</label>
                     <select
                       bind:value={triageProject}
-                      disabled={actionInProgress}
+                      disabled={actionInProgress || projectsLoading}
                       class="w-full bg-zinc-800 border border-zinc-700 rounded p-2 text-sm text-zinc-300 outline-none focus:border-amber-500 disabled:opacity-50"
                     >
-                       <option value="">{data.suggestedProject || 'Select...'}</option>
-                       {#each allProjects as p}<option value={p}>{p}</option>{/each}
+                       <option value="">{projectsLoading ? 'Loading...' : (data.suggestedProject || 'Select...')}</option>
+                       {#each projects as p}<option value={p}>{p}</option>{/each}
                     </select>
                  </div>
                  <div class="w-24">

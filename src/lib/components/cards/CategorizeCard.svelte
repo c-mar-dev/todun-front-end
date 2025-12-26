@@ -24,8 +24,8 @@
   let projectsLoading = false;
   let projectsError = null;
 
-  // Merge fetched projects with decision data projects (deduplicated)
-  $: allProjects = [...new Set([...(data.projects || []), ...fetchedProjects])].sort();
+  // Use only API-fetched projects (ignore data.projects which may contain non-project items)
+  $: allProjects = [...fetchedProjects].sort();
 
   // Fetch projects on mount
   onMount(async () => {
