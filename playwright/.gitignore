@@ -1,0 +1,7 @@
+# Auth state files (contains session cookies)
+.auth/
+
+# Test artifacts
+test-results/
+playwright-report/
+playwright-report-production/

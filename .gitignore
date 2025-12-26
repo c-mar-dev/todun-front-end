@@ -34,3 +34,12 @@ pnpm-debug.log*
 # OS
 .DS_Store
 Thumbs.db
+
+# Test outputs
+playwright-report/
+playwright-report-production/
+test-results/
+playwright/.cache/
+
+# Claude Code local settings
+.claude/settings.local.json
