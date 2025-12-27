@@ -88,6 +88,9 @@ export interface CardFormData {
   // Conflict (merge)
   mergeContent?: string;
 
+  // Title editing (available for all decision types)
+  titleUpdate?: string;
+
   // Meeting Triage
   selectedTasks?: string[];
 }
@@ -163,28 +166,37 @@ export function buildResolutionPayload(
   // Handle "Route to X" actions (prefix match)
   if (actionName.startsWith('Route to ')) {
     const destination = actionName.replace('Route to ', '');
-    return {
-      resolution: buildTriagePayload(decision, actionName, { ...formData, destination }),
-    };
+    const resolution = buildTriagePayload(decision, actionName, { ...formData, destination });
+    // Include title update if present
+    if (formData.titleUpdate) {
+      resolution.titleUpdate = formData.titleUpdate;
+    }
+    return { resolution };
   }
 
   // Look up builder function
   const builder = actionToPayloadMap[actionName];
 
   if (builder) {
-    return {
-      resolution: builder(decision, actionName, formData),
-    };
+    const resolution = builder(decision, actionName, formData);
+    // Include title update if present
+    if (formData.titleUpdate) {
+      resolution.titleUpdate = formData.titleUpdate;
+    }
+    return { resolution };
   }
 
   // Fallback: return action name as resolution type
   console.warn(`No resolution builder for action: ${actionName}`);
-  return {
-    resolution: {
-      action: actionName,
-      ...formData,
-    },
+  const resolution: Record<string, unknown> = {
+    action: actionName,
+    ...formData,
   };
+  // Include title update if present
+  if (formData.titleUpdate) {
+    resolution.titleUpdate = formData.titleUpdate;
+  }
+  return { resolution };
 }
 
 // =============================================================================

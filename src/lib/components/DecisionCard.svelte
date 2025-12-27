@@ -48,6 +48,10 @@
   // Review
   let reviewFeedback = '';
 
+  // Title editing
+  let editingTitle = false;
+  let editedTitle = '';
+
   // Clarifying
   let clarifyAnswers = {};
 
@@ -90,6 +94,10 @@
     enrichDate = d.date || '';
     enrichSpeakers = d.speakers ? d.speakers.map(s => ({ ...s })) : [];
 
+    // Title editing
+    editedTitle = decision.subject.title || '';
+    editingTitle = false;
+
     // Reset clarify answers
     clarifyAnswers = {};
   }
@@ -108,6 +116,11 @@
    */
   function collectFormData(actionName) {
     const formData = {};
+
+    // Include title update if changed
+    if (editedTitle && editedTitle !== decision.subject.title) {
+      formData.titleUpdate = editedTitle;
+    }
 
     switch (decision.decisionType) {
       case 'triage':
@@ -245,7 +258,24 @@
           <span class="px-2 py-1 rounded text-xs font-bold bg-red-900/30 text-red-400 border border-red-900/50">🔥 CRITICAL</span>
         {/if}
      </div>
-     <h2 class="text-2xl font-semibold text-white leading-tight mb-2">{decision.subject.title}</h2>
+     {#if editingTitle}
+        <input
+          type="text"
+          bind:value={editedTitle}
+          on:blur={() => editingTitle = false}
+          on:keydown={(e) => { if (e.key === 'Enter') editingTitle = false; }}
+          class="text-2xl font-semibold text-white leading-tight mb-2 bg-transparent border-b border-amber-500 outline-none w-full"
+          autofocus
+        />
+     {:else}
+        <h2
+          class="text-2xl font-semibold text-white leading-tight mb-2 cursor-pointer hover:text-amber-300 transition-colors"
+          on:click={() => editingTitle = true}
+          title="Click to edit title"
+        >
+          {editedTitle || decision.subject.title}
+        </h2>
+     {/if}
      {#if decision.subject.originalText}
         <p class="text-zinc-500 italic text-sm">"{decision.subject.originalText}"</p>
      {/if}
