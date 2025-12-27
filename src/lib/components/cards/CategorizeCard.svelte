@@ -105,7 +105,8 @@
         payload: {
           category: selectedCategory,
           project: selectedProject || null,
-          fieldUpdates: Object.keys(fieldUpdates).length > 0 ? fieldUpdates : null
+          fieldUpdates: Object.keys(fieldUpdates).length > 0 ? fieldUpdates : null,
+          state_action: 'route'  // Chain to specification decision
         }
       });
     } finally {

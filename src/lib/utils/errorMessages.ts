@@ -30,6 +30,7 @@ export const ERROR_MESSAGES: Record<string, string> = {
   'DE-DEC-003': 'Invalid request format', // Will use error.message directly
   'DE-DEC-004': 'Maximum deferrals reached. Please make a decision.',
   'DE-DEC-005': 'Undo window has expired',
+  'DE-DEC-006': 'Resolution conflict. Please refresh and try again.',
 
   // Network/Client Errors
   'NETWORK_ERROR': 'Unable to connect. Check your connection.',
